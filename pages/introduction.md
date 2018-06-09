@@ -27,7 +27,7 @@ page_nav:
 
 ---
 
-Tokaido (*tok-eye-doh*) is a command-line utility and a collection of open source Docker containers that enable you to quickly and easily launch new local development environments for Drupal 8 on MacOS and Linux.
+Tokaido (*toh-kai-doh*) is an open source command-line utility and a collection of Docker containers that enable you to quickly and easily launch new local development environments for Drupal 8 on MacOS and Linux.
 
 The Tokaido CLI - `tok` - gives you access to launch, control, and destroy local dev environments with Docker. You can run multiple Tokaido environments simultaneously, one for each Drupal site you're working on.
 

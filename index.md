@@ -40,7 +40,7 @@ grid_navigation:
       url: '/environments'
 
     - title: Tokaido Containers
-      excerpt: Nginx, Varnish, PHP, Memcache, and more. Learn about the Tokaido containers and how unleash their power 
+      excerpt: Nginx, Varnish, PHP, Memcache, and more. Learn about the Tokaido containers and how to unleash their power 
       cta: Meet the family
       url: '/containers'
 
