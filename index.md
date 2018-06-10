@@ -13,14 +13,6 @@ buttons:
       external_url: false
     - content: Get Tokaido
       url: '/installation'
-      
-
-# Search box
-author:
-    title: Search Box Here
-    title_url: '#'
-    external_url: true
-    description: Will use [Algolia](https://community.algolia.com/docsearch/)
 
 # Grid navigation
 grid_navigation:

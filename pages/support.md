@@ -9,13 +9,6 @@ permalink: support
 title: Help!
 description: Tokaido Troubleshooting and Support
 
-# Search box
-author:
-    title: Search Box Here
-    title_url: '#'
-    external_url: true
-    description: Will use [Algolia](https://community.algolia.com/docsearch/)
-
 # Micro navigation
 micro_nav: true
 

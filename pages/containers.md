@@ -9,13 +9,6 @@ permalink: containers
 title: Containers
 description: Open source containers for Drupal 8 hosting
 
-# Search box
-author:
-    title: Search Box Here
-    title_url: '#'
-    external_url: true
-    description: Will use [Algolia](https://community.algolia.com/docsearch/)
-
 # Micro navigation
 micro_nav: true
 
