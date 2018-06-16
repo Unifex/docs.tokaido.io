@@ -121,3 +121,52 @@ Unfortunately this is a difficult option to implement. Synchronising your `~/.dr
 Since the [official example](https://github.com/drush-ops/drush/blob/master/examples/example.site.yml){:target="_blank"} for Drush suggests that the preferred location for site aliases is in the `$ROOT/drush/sites/` folder, we decided to follow this example. 
 
 So in most cases, getting your site aliases to work inside Tokaido is as simple as copying the alias from `~/.drush/` to `$ROOT/drush/sites/`
+
+### Is xdebug Supported?
+We're working on formal first-class xdebug support at the moment, but as you can appreciate it's a tricky thing to do well. 
+
+Right now, Tokaido does provide xdebug support but it requires some manual configuration. 
+
+First, once you've run `tok init`, you'll need to identify the IP address of your workstation, relative to the Docker containers that Tokaido runs. This is pretty easy, and just requires that you run `docker network inspect {{project-name}}_default | grep Gateway`
+
+You can now add the IP address you have along with a couple of other values to the `docker-compose.tok.yml` as environment variables for the 'fpm' container. This will instruct FPM to run xdebug and to attempt to connect to your host on the xdebug port you have listening. To that, add these lines:
+
+```
+environment:
+    XDEBUG_REMOTE_ENABLE: "yes"
+    XDEBUG_REMOTE_AUTOSTART: "yes"      
+    XDEBUG_REMOTE_HOST: "{ip-address-from-docker-network-inspect}"
+    XDEBUG_REMOTE_PORT: "9000" 
+```
+
+For example your whole FPM configuration block in the `docker-compose.tok.yml` file should now look like: 
+
+```
+  fpm:
+    user: "1001"
+    image: tokaido/fpm:latest
+    working_dir: /tokaido/site/
+    volumes_from:
+      - unison
+      - syslog
+    depends_on:
+      - syslog
+    ports:
+      - "9000"      
+    environment:
+      PHP_DISPLAY_ERRORS: "yes"
+      XDEBUG_REMOTE_ENABLE: "yes"
+      XDEBUG_REMOTE_AUTOSTART: "yes"      
+      XDEBUG_REMOTE_HOST: "172.21.0.1"
+      XDEBUG_REMOTE_PORT: "9000"     
+```
+
+You then need to restart the FPM container to pick up the changes:
+
+`dc -f docker-compose.tok.yml kill fpm && dc -f docker-compose.tok.yml up -d fpm`
+
+That should be all that's necessary. If your editor (we've tested with phpstorm and vscode) is listening on port 9000 (or whatever port you specified in `XDEBUG_REMOTE_PORT`) you should see debug information coming in. 
+
+<div class="callout callout--info">
+    <p>Although xdebug support is experimental, we've very keen to make sure we have first-class support for xdebug in future releases. If you use xdebug in your daily development, please contact us to share your experience and key features you'd like to see!</p>
+</div>
