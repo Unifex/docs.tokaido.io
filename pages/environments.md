@@ -49,20 +49,20 @@ To get started:
 - Run `tok init` 
 
 ```
-$ tok init  
-
+$ tok init
 🚅  Tokaido is initializing your project!
-
-Checking required dependencies
-Firing up the Unison container!
-Running one time unison sync of your files with the container.
-
 🚡  First time lifting your containers? There's a few images to download, this might take some time.
-🚉  Tokaido successfully initialized your project!
 
-⌨️  To access Drush via SSH run `ssh tokaido-test-project.tok`
-👀  To open your site, just run `tok open`
+WELCOME TO TOKAIDO
+==================
 
+Your Drupal development environment is now up and running
+
+⌚  Run "tok watch" to keep files in your local system and the Tokaido environment synchronised
+💻  Run "ssh my-project.tok" to access the Drush container
+🌎  Run "tok open" to open the environment in your browser
+
+Check out https://docs.tokaido.io/environments for tips on managing your Tokaido environment
 ```
 
 That's all you need to do! As the output suggests, you can access the SSH container and Drush by running `ssh your-project-name.tok`. 
@@ -70,22 +70,23 @@ That's all you need to do! As the output suggests, you can access the SSH contai
 You can also run `tok open` to have the Tokaido site in your browser. But if you've only just run `tok init`, you'll probably just get an error message. Let's move on... 
 
 ## Checking the Status of your Environment
-You can run `tok status` from the repo root at any time to see the status of your Docker containers. 
+You can run `docker-compose -f docker-compose.tok.yml ps` from the repo root at any time to see the status of your Docker containers. 
 
 ```
-$ tok status
+$ docker-compose -f docker-compose.tok.yml ps
+       Name                     Command               State                        Ports
+--------------------------------------------------------------------------------------------------------------
+odppnsw_drush_1      /usr/local/bin/entrypoint.sh     Up      0.0.0.0:32813->22/tcp
+odppnsw_fpm_1        /usr/local/bin/entrypoint.sh     Up      0.0.0.0:32815->9000/tcp
+odppnsw_haproxy_1    /usr/local/bin/entrypoint.sh     Up      0.0.0.0:32818->8080/tcp, 0.0.0.0:32817->8443/tcp
+odppnsw_memcache_1   docker-entrypoint.sh memcached   Up      11211/tcp
+odppnsw_mysql_1      docker-entrypoint.sh mysqld      Up      0.0.0.0:32814->3306/tcp
+odppnsw_nginx_1      /usr/local/bin/entrypoint.sh     Up      80/tcp, 0.0.0.0:32816->8082/tcp
+odppnsw_solr_1       solr-precreate drupal /opt ...   Up      0.0.0.0:32812->8983/tcp
+odppnsw_syslog_1     /usr/sbin/syslog-ng -F --p ...   Up      5514/tcp, 5601/tcp
+odppnsw_unison_1     /sbin/tini -- /entrypoint.sh     Up      0.0.0.0:32811->5000/tcp
+odppnsw_varnish_1    /usr/local/bin/entrypoint.sh     Up      8081/tcp
 
-Name                            Command               State                        Ports
----------------------------------------------------------------------------------------------------------------------------
-tokaido-test-project_drush_1      /usr/local/bin/entrypoint.sh     Up      0.0.0.0:32769->22/tcp
-tokaido-test-project_fpm_1        /usr/local/bin/entrypoint.sh     Up      9000/tcp
-tokaido-test-project_haproxy_1    /usr/sbin/haproxy -f /usr/ ...   Up      0.0.0.0:32772->8080/tcp, 0.0.0.0:32771->8443/tcp
-tokaido-test-project_memcache_1   docker-entrypoint.sh memcached   Up      11211/tcp
-tokaido-test-project_mysql_1      docker-entrypoint.sh mysqld      Up      3306/tcp
-tokaido-test-project_nginx_1      /usr/local/bin/entrypoint.sh     Up      80/tcp, 0.0.0.0:32770->8082/tcp
-tokaido-test-project_syslog_1     /usr/sbin/syslog-ng -F --p ...   Up      5514/tcp, 5601/tcp
-tokaido-test-project_unison_1     /entrypoint.sh                   Up      0.0.0.0:32768->5000/tcp
-tokaido-test-project_varnish_1    /usr/local/bin/entrypoint.sh     Up      8081/tcp
 ```
 
 Using this status output, you can see that all the containers in our example are "Up". That means that Tokaido should be working and ready to go. 
@@ -103,7 +104,13 @@ In a new terminal window, run `tok watch` to synchronise files between your loca
 If you don't want to keep this running all the time, you can run `tok sync` to perform a one-time sync on demand. 
 
 ## Configuring Drupal to use the Tokaido Database
-Your site needs to be told how to access the MySQL database that Tokaido provides. To do this, add the following line to the bottom of your `sites/default/settings.php` file:
+Your site needs to be told how to access the MySQL database that Tokaido provides. 
+
+When you run `tok init` on a new, Tokaido will ask you if you want to automatically configure this database connection. If you agree, Tokaido will create the file `docroot/sites/default/settings.tok.php` and link to it from `docroot/sites/default/settings.php`. It will also add some Tokaido-specific files to your `.gitignore`
+
+You can optionally manually configure your database connectoin, which can be especially helpful for Drupal multisite configurations.
+
+To do this, add the following line to the bottom of your `sites/default/settings.php` file:
 
 <div class="callout callout--danger">
     <p>Make sure you have `tok watch` running so that your changes are copied into the Tokaido environment</p>
@@ -137,8 +144,6 @@ Now you can create the `settings.tok.php` file with the following:
 <div class="callout callout--warning">
     <p>You don't want the settings.tok.php file being used in your production environments. Be sure to add this file to your .gitignore</p>
 </div>
-
-
 
 ## Accessing the Environment Using SSH 
 It's time to access the Tokaido environment directly, which you can do via SSH.
