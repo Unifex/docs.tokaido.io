@@ -106,3 +106,16 @@ The Unison container runs a local Unison server, an rsync-like utility that perf
 When you start Tokaido by running `tok init` or `tok up`, it synchronises your local repository with the remote environment. To catch further changes, you can run `tok sync` to perform a one-time sync, or run `tok watch` to keep Unison running and syncing any time changes are made. 
 
 When Tokaido sets up your environment, it creates a Unison profile inside `~/.unison`. This file gives Unison all of the details it needs to find and sync your site. 
+
+### Solr
+Tokaido ships with a Solr 6.6 container that extends the official [Docker Solr 6.6 Slim image](https://github.com/docker-solr/docker-solr/tree/master/6.6/slim){:target="_blank"}
+
+This container currently launches by default and creates a core called `drupal`. 
+
+You can access the Solr web interface using the exposed Solr port. You can look this up with this command:
+
+- `docker-compose -f docker-compose.tok.yml port solr 8983`
+
+This default core includes the Solr conf directory from [search_api_solr release 8.x-2.0](https://www.drupal.org/project/search_api_solr/releases/8.x-2.0){:target="_blank"}
+
+Inside your Drupal site, you can reach the Solr container using the hostname `solr` on the defautl port 8983. This should work with only the minimal, default config. 
