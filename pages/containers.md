@@ -88,7 +88,7 @@ $settings['memcache_storage']['memcached_servers'] = ['memcache:11211' => 'defau
 ### MySQL
 The MySQL container provides a local MySQL instance for your Tokaido site. We didn't need to invent anything special for this service, so Tokaido just uses the official Docker MySQL image. Check out the [Environments](/environments) documentation for more details.
 
-Note that each time to replace your Tokaido environment by using `tok destroy` or `tok init` you will completely destroy your MySQL database. 
+Note that each time to replace your Tokaido environment by using `tok destroy` you will completely destroy your MySQL database. 
 
 ### Drush
 The Drush container _is_ something we had to invent especially. It provides an SSH server and many, many friendly tools for managing PHP and Drupal sites. This includes Composer, Vim, the Mysql client, and of course PHP itself. 
@@ -103,7 +103,7 @@ The Syslog container helps with log collection for all of your various container
 ### Unison
 The Unison container runs a local Unison server, an rsync-like utility that performs fast bi-directional sync. 
 
-When you start Tokaido by running `tok init` or `tok up`, it synchronises your local repository with the remote environment. To catch further changes, you can run `tok sync` to perform a one-time sync, or run `tok watch` to keep Unison running and syncing any time changes are made. 
+When you start Tokaido by running `tok up`, it synchronises your local repository with the remote environment. To catch further changes, you can run `tok sync` to perform a one-time sync, or run `tok watch` to keep Unison running and syncing any time changes are made. 
 
 When Tokaido sets up your environment, it creates a Unison profile inside `~/.unison`. This file gives Unison all of the details it needs to find and sync your site. 
 
@@ -114,7 +114,7 @@ This container currently launches by default and creates a core called `drupal`.
 
 You can access the Solr web interface using the exposed Solr port. You can look this up with this command:
 
-- `docker-compose -f docker-compose.tok.yml port solr 8983`
+- `tok ports 8983`
 
 This default core includes the Solr conf directory from [search_api_solr release 8.x-2.0](https://www.drupal.org/project/search_api_solr/releases/8.x-2.0){:target="_blank"}
 

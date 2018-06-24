@@ -46,12 +46,12 @@ Our example commands here will be using the [tokaido-test-project](https://githu
 To get started:
 
 - Open a terminal window and navigate to your project's repository directory (the "repo root")
-- Run `tok init` 
+- Run `tok up` 
 
 ```
-$ tok init
+$ tok up
 🚅  Tokaido is initializing your project!
-🚡  First time lifting your containers? There's a few images to download, this might take some time.
+🏯  Generating a new docker-compose.tok.yml file
 
 WELCOME TO TOKAIDO
 ==================
@@ -59,15 +59,16 @@ WELCOME TO TOKAIDO
 Your Drupal development environment is now up and running
 
 ⌚  Run "tok watch" to keep files in your local system and the Tokaido environment synchronised
-💻  Run "ssh my-project.tok" to access the Drush container
+💻  Run "ssh odppnsw.tok" to access the Drush container
 🌎  Run "tok open" to open the environment in your browser
 
 Check out https://docs.tokaido.io/environments for tips on managing your Tokaido environment
+
 ```
 
 That's all you need to do! As the output suggests, you can access the SSH container and Drush by running `ssh your-project-name.tok`. 
 
-You can also run `tok open` to have the Tokaido site in your browser. But if you've only just run `tok init`, you'll probably just get an error message. Let's move on... 
+You can also run `tok open` to have the Tokaido site in your browser. But if you've only just run `tok up`, you'll probably just get an error message. Let's move on... 
 
 ## Checking the Status of your Environment
 You can run `docker-compose -f docker-compose.tok.yml ps` from the repo root at any time to see the status of your Docker containers. 
@@ -94,8 +95,8 @@ Using this status output, you can see that all the containers in our example are
 The "Ports" output can show you the local port number (immediately following "0.0.0.0:") for some of the exposed services. For example, you can bypass Varnish and Haproxy by connecting directly to the Nginx port on port 32770.
 
 <div class="callout callout--warning">
-    <p>Port numbers change every time you start a Tokaido environment using `tok init` or `tok up`.</p> 
-    <p>This is why commands like `tok open` make life a bit easier, but you can always look up the current port number with `tok status` as well.</p>
+    <p>Port numbers change every time you start a Tokaido environment using `tok up`.</p> 
+    <p>This is why commands like `tok open` make life a bit easier, but you can always look up the current port number with `tok ports` as well.</p>
 </div>
 
 ## Keeping in Sync
@@ -106,9 +107,9 @@ If you don't want to keep this running all the time, you can run `tok sync` to p
 ## Configuring Drupal to use the Tokaido Database
 Your site needs to be told how to access the MySQL database that Tokaido provides. 
 
-When you run `tok init` on a new, Tokaido will ask you if you want to automatically configure this database connection. If you agree, Tokaido will create the file `docroot/sites/default/settings.tok.php` and link to it from `docroot/sites/default/settings.php`. It will also add some Tokaido-specific files to your `.gitignore`
+When you run `tok up` on a new, Tokaido will ask you if you want to automatically configure this database connection. If you agree, Tokaido will create the file `docroot/sites/default/settings.tok.php` and link to it from `docroot/sites/default/settings.php`. It will also add some Tokaido-specific files to your `.gitignore`
 
-You can optionally manually configure your database connectoin, which can be especially helpful for Drupal multisite configurations.
+You can optionally manually configure your database connection, which can be especially helpful for Drupal multisite configurations.
 
 To do this, add the following line to the bottom of your `sites/default/settings.php` file:
 
@@ -148,7 +149,7 @@ Now you can create the `settings.tok.php` file with the following:
 ## Accessing the Environment Using SSH 
 It's time to access the Tokaido environment directly, which you can do via SSH.
 
-- Run `ssh project-name.tok`. Obviously, substitute 'project-name'. By default, Tokaido uses the directory name of the repo root.
+- Run `ssh project-name.tok`. Substitute 'project-name' as necessary; By default Tokaido uses the directory name of the repo root.
 
 This logs you into a container that shares a copy of your site with the other containers like Nginx. 
 
@@ -168,10 +169,10 @@ tok@tokaido:/tokaido/site/docroot$
 ```
 When you first log in, you'll be in the `/tokaido/site/docroot` folder. If you haven't run `composer install` on your Drupal site yet, now is a good time (you'll need to move up one directory).
 
-If Composer is complete, you can run `drush site-install` to install Drupal:
+After Composer, you can run `drush site-install` to install Drupal:
 
 ```
-tok@tokaido:/tokaido/site/docroot$ drush site-install -y
+🚅 LOCAL project-name 03:53:45 /tokaido/site/docroot $ drush site-install -y
 
  // You are about to DROP all tables in your 'tokaido' database. Do you want to continue?: yes.
 
@@ -192,13 +193,7 @@ This opens the site via the HAProxy container using HTTPS.
 
 Since Tokaido uses dynamic port numbers, we added this command to make it easy to open your site in your default browser. On Mac, this runs the `open` command, or on Linux it runs `xdg-open`.
 
-If you can't use `tok open` for some reason, or you want to use a different browser, you can look up the port number with this command:
-
-- `docker-compose -f docker-compose.tok.yml port haproxy 8443`
-
-If you want to bypass HAProxy and Varnish, you can access the Nginx container directly on HTTP (not HTTPS). Look up that port number with this command:
-
-- `docker-compose -f docker-compose.tok.yml port nginx 8082`
+If you can't use `tok open` for some reason, or you want to use a different browser, you can look up the port number with the `tok ports` command.
 
 ## Starting and Stopping the Environment
 After you log out, reboot, or manually stop the environment, you'll need to start it again. 
@@ -217,10 +212,10 @@ Feeling destructive? Having a bad day?
 - Run `tok destroy` to completely delete and erase your containers. 
 
 <div class="callout callout--warning">
-    <p>tok destroy will delete your database</p> 
+    <p>tok destroy will delete your database!</p> 
 </div>
 
-When you want to restart the environment, just run `tok init` again. 
+When you want to restart the environment, just run `tok up` again. 
 
 ## Modifying the PHP Environment
 The Tokaido PHP FPM container ships with some sane defaults that are generally reasonable for both local development and production environments. 
@@ -286,7 +281,7 @@ Varnish also adds some production-ready headers like `X-FRAME-OPTIONS` and `X-XS
 
 If you want to bypass HAProxy and Varnish, you can access the Nginx container directly on HTTP (not HTTPS). Look up that port number with this command:
 
-- `docker-compose -f docker-compose.tok.yml port nginx 8082`
+- `tok ports nginx`
 
 ## Using Drush Aliases
 Drush and Drush aliases work perfectly inside Tokaido environments. The only problem you might encounter is that Tokaido doesn't synchronise any location outside of your repo root. This means that aliases stored in your home directory (ie. `~/.drush`) aren't known inside Tokaido. 
@@ -307,7 +302,7 @@ You can access the database from inside Tokaido by using either `drush ssh` or `
 
 If you want to access the MySQL database from your local system, you need to identify the MySQL Port:
 
-- `docker-compose -f docker-compose.tok.yml port mysql 3306`
+- `tok ports mysql`
 
 Finally, you can log in as root by using the same password (`tokaido`). For example: 
 

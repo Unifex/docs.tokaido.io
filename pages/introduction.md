@@ -24,7 +24,7 @@ Tokaido (*toh-kai-doh*) is an open source command-line utility and a collection 
 
 The Tokaido CLI - `tok` - gives you access to launch, control, and destroy local dev environments with Docker. You can run multiple Tokaido environments simultaneously, one for each Drupal site you're working on.
 
-New Tokaido environments are launched easily with `tok init`.
+New Tokaido environments are launched easily with `tok up`.
 
 ## What's included
 
@@ -42,7 +42,7 @@ Each Tokaido environment you launch comes complete with:
 
 Once your local stack is running, Tokaido provides access to a variety of convenience functions to make it easier to work with and manage your local dev environment, including:
 
-* `tok init` - Start a new Tokaido environment. You want to run this first from your Drupal repository root 
+* `tok up` - Start a Tokaido environment. You run this from your repo root
 * `tok drupal-setup` Update settings.php in the default site so that it knows how to access the Tokaido-hosted database
 * `tok sync` - Perform a one-time sync of between local host and the Tokaido dev environment
 * `tok watch` - Maintain an open process to watch for all content changes and actively sync whenever necessary
@@ -58,7 +58,7 @@ You can run `tok help` at any time to see more commands that Tokaido offers.
 
 One of the most beautiful but challenging things about Drupal is that there are so many different ways you can use it. Tokaido is designed to support the most common use case:
 
-- Drupal 8.5.3 or newer is supported (Drupal 7 might work, but it's unsupported)
+- Drupal 8.5.3 or newer is supported (Drupal 7 won't work, but we'd love to talk to someone about helping us provision D7 support!)
 - Your Drupal site should be installed and managed with Composer (although this isn't essential)
 - Your Drupal site must reside in the `docroot` directory
 

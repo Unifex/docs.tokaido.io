@@ -100,7 +100,7 @@ Because Tokaido uses Docker, it has the added benefit of using very limited syst
 With most small and even medium Drupal sites, you won't notice a performance difference either with Tokaido, or virtual-system based solutions like Beetbox and DrupalVM. 
 
 ### How does the SSH config work?
-When you run `tok init`, Tokaido installed an SSH profile for your project into `~/.ssh/tok_config`. It looks something like this:
+When you run `tok up`, Tokaido installed an SSH profile for your project into `~/.ssh/tok_config`. It looks something like this:
 
 ```
 Host project-name.tok
@@ -127,7 +127,7 @@ We're working on formal first-class xdebug support at the moment, but as you can
 
 Right now, Tokaido does provide xdebug support but it requires some manual configuration. 
 
-First, once you've run `tok init`, you'll need to identify the IP address of your workstation, relative to the Docker containers that Tokaido runs. This is pretty easy, and just requires that you run `docker network inspect {{project-name}}_default | grep Gateway`
+First, once you've run `tok up`, you'll need to identify the IP address of your workstation, relative to the Docker containers that Tokaido runs. This is pretty easy, and just requires that you run `docker network inspect {{project-name}}_default | grep Gateway`
 
 You can now add the IP address you have along with a couple of other values to the `docker-compose.tok.yml` as environment variables for the 'fpm' container. This will instruct FPM to run xdebug and to attempt to connect to your host on the xdebug port you have listening. To that, add these lines:
 
